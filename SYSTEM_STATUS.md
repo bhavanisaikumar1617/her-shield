@@ -250,8 +250,8 @@ Server -> Client:
 
 ### Environment Variables Required
 ```
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/her-shield
-JWT_SECRET=your-secret-key-here
+MONGO_URI=your_mongodb_uri_here
+JWT_SECRET=your_secret_here
 NODE_ENV=production
 VITE_API_URL=https://api.yourserver.com
 ```
