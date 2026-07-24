@@ -3,7 +3,7 @@
 ## ✅ System Status: PRODUCTION READY
 
 **Last Validated:** 2025-01-25  
-**Backend Status:** Running on http://localhost:4000  
+**Backend Status:** Running on https://her-shield-production.up.railway.app  
 **Frontend Status:** Running on http://localhost:5174  
 **Database Status:** MongoDB connected  
 
@@ -337,8 +337,8 @@
 
 ### Production Environment
 ```bash
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/her-shield
-JWT_SECRET=generate-secure-key-here
+MONGO_URI=your_mongodb_uri_here
+JWT_SECRET=your_secret_here
 NODE_ENV=production
 VITE_API_URL=https://api.yourdomain.com
 CORS_ORIGIN=https://yourdomain.com

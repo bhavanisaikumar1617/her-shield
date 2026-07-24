@@ -8,7 +8,7 @@
 The Women Safety & Emergency Assistance Platform has been comprehensively upgraded into a **production-ready, secure, and scalable system**. All 14 requirements have been implemented and verified.
 
 **System Status:** ✅ **FULLY OPERATIONAL**
-- Backend: Running on http://localhost:4000
+- Backend: Running on https://her-shield-production.up.railway.app
 - Frontend: Running on http://localhost:5174  
 - Database: MongoDB connected and synced
 - Real-time: Socket.io active with room-based routing
@@ -250,8 +250,8 @@ Server -> Client:
 
 ### Environment Variables Required
 ```
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/her-shield
-JWT_SECRET=your-secret-key-here
+MONGO_URI=your_mongodb_uri_here
+JWT_SECRET=your_secret_here
 NODE_ENV=production
 VITE_API_URL=https://api.yourserver.com
 ```

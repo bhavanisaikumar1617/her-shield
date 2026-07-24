@@ -11,12 +11,17 @@ const defaultAdmin = {
   name: 'Admin',
   email: 'admin@hershield.com',
   username: 'admin',
-  password: 'admin123',
   role: 'admin',
 }
 
+const seedAdminPassword = String(process.env.SEED_ADMIN_PASSWORD || '').trim()
+
 async function seedAdmin() {
   try {
+    if (!seedAdminPassword) {
+      throw new Error('SEED_ADMIN_PASSWORD is required in your .env file before running seed:admin.')
+    }
+
     await connectToDatabase()
 
     const existingAdmin = await User.findOne({ email: defaultAdmin.email }).lean()
@@ -25,7 +30,7 @@ async function seedAdmin() {
       return
     }
 
-    const hashedPassword = await bcrypt.hash(defaultAdmin.password, 10)
+    const hashedPassword = await bcrypt.hash(seedAdminPassword, 10)
 
     await User.create({
       name: defaultAdmin.name,
@@ -39,7 +44,7 @@ async function seedAdmin() {
 
     console.log('Admin user seeded successfully.')
     console.log(`Email: ${defaultAdmin.email}`)
-    console.log(`Password: ${defaultAdmin.password}`)
+    console.log('Password source: SEED_ADMIN_PASSWORD from environment')
   } catch (error) {
     console.error('Failed to seed admin user:', error)
     process.exitCode = 1

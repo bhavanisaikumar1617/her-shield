@@ -102,9 +102,9 @@ function VolunteerProfilePage() {
     try {
       const headers = { Authorization: `Bearer ${authToken}` }
       const [profileResponse, assignedResponse, completedResponse] = await Promise.all([
-        fetch('http://localhost:4000/api/volunteer/profile', { headers }),
-        fetch('http://localhost:4000/api/alerts/assigned', { headers }),
-        fetch('http://localhost:4000/api/alerts/completed', { headers }),
+        fetch('https://her-shield-production.up.railway.app/api/volunteer/profile', { headers }),
+        fetch('https://her-shield-production.up.railway.app/api/alerts/assigned', { headers }),
+        fetch('https://her-shield-production.up.railway.app/api/alerts/completed', { headers }),
       ])
 
       const [profileResult, assignedResult, completedResult] = await Promise.all([
@@ -144,7 +144,7 @@ function VolunteerProfilePage() {
     setErrorMessage('')
 
     try {
-      const response = await fetch(`http://localhost:4000/api/alerts/${alertId}/complete`, {
+      const response = await fetch(`https://her-shield-production.up.railway.app/api/alerts/${alertId}/complete`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -209,7 +209,7 @@ function VolunteerProfilePage() {
 
     setSavingPassword(true)
     try {
-      const response = await fetch('http://localhost:4000/api/users/change-password', {
+      const response = await fetch('https://her-shield-production.up.railway.app/api/users/change-password', {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${authToken}`,

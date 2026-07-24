@@ -125,7 +125,7 @@ function AppProvider({ children }) {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/users/me', {
+      const response = await fetch('https://her-shield-production.up.railway.app/api/users/me', {
         headers: {
           Authorization: `Bearer ${storedToken}`,
         },
@@ -246,9 +246,9 @@ function AppProvider({ children }) {
     }
 
     const endpointByRole = {
-      user: 'http://localhost:4000/api/alerts/my-alerts',
-      volunteer: 'http://localhost:4000/api/alerts/nearby',
-      admin: 'http://localhost:4000/api/alerts/all',
+      user: 'https://her-shield-production.up.railway.app/api/alerts/my-alerts',
+      volunteer: 'https://her-shield-production.up.railway.app/api/alerts/nearby',
+      admin: 'https://her-shield-production.up.railway.app/api/alerts/all',
     }
 
     const endpoint = endpointByRole[currentUser.role]
@@ -277,7 +277,7 @@ function AppProvider({ children }) {
     }
 
     try {
-      const response = await authFetch('http://localhost:4000/api/contacts')
+      const response = await authFetch('https://her-shield-production.up.railway.app/api/contacts')
       if (!response.ok) {
         return
       }
@@ -296,7 +296,7 @@ function AppProvider({ children }) {
     }
 
     try {
-      const response = await authFetch('http://localhost:4000/api/safe-zones')
+      const response = await authFetch('https://her-shield-production.up.railway.app/api/safe-zones')
       if (!response.ok) {
         return
       }
@@ -396,7 +396,7 @@ function AppProvider({ children }) {
   const fetchVolunteers = useCallback(async () => {
     setIsVolunteersLoading(true)
     try {
-      const response = await fetch('http://localhost:4000/api/volunteers')
+      const response = await fetch('https://her-shield-production.up.railway.app/api/volunteers')
       if (!response.ok) {
         throw new Error('Failed to fetch volunteers')
       }
@@ -455,7 +455,7 @@ function AppProvider({ children }) {
 
   const updateVolunteerLocation = useCallback(async (volunteerId, latitude, longitude) => {
     try {
-      const response = await authFetch(`http://localhost:4000/api/volunteers/${volunteerId}/location`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/volunteers/${volunteerId}/location`, {
         method: 'PATCH',
         body: JSON.stringify({ latitude, longitude }),
       })
@@ -475,7 +475,7 @@ function AppProvider({ children }) {
     async (identifier, password) => {
       setIsLoginLoading(true)
       try {
-        const response = await fetch('http://localhost:4000/api/auth/login', {
+        const response = await fetch('https://her-shield-production.up.railway.app/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier, password }),
@@ -557,7 +557,7 @@ function AppProvider({ children }) {
         body = JSON.stringify(formDataOrObj)
       }
 
-      const response = await fetch('http://localhost:4000/api/auth/signup', {
+      const response = await fetch('https://her-shield-production.up.railway.app/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body,
@@ -610,7 +610,7 @@ function AppProvider({ children }) {
 
   const addContact = useCallback(
     async (name, number, relationship = '') => {
-      const response = await authFetch('http://localhost:4000/api/contacts', {
+      const response = await authFetch('https://her-shield-production.up.railway.app/api/contacts', {
         method: 'POST',
         body: JSON.stringify({ name, number, relationship }),
       })
@@ -628,7 +628,7 @@ function AppProvider({ children }) {
 
   const updateContact = useCallback(
     async (contactId, updates) => {
-      const response = await authFetch(`http://localhost:4000/api/contacts/${contactId}`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/contacts/${contactId}`, {
         method: 'PATCH',
         body: JSON.stringify(updates),
       })
@@ -646,7 +646,7 @@ function AppProvider({ children }) {
 
   const deleteContact = useCallback(
     async (contactId) => {
-      const response = await authFetch(`http://localhost:4000/api/contacts/${contactId}`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/contacts/${contactId}`, {
         method: 'DELETE',
       })
 
@@ -665,7 +665,7 @@ function AppProvider({ children }) {
         return
       }
 
-      const response = await authFetch(`http://localhost:4000/api/alerts/${alertId}/location`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/alerts/${alertId}/location`, {
         method: 'PATCH',
         body: JSON.stringify({ latitude, longitude }),
       })
@@ -718,7 +718,7 @@ function AppProvider({ children }) {
 
   const saveSafetyProfile = useCallback(
     async (profileData) => {
-      const response = await authFetch('http://localhost:4000/api/users/update', {
+      const response = await authFetch('https://her-shield-production.up.railway.app/api/users/update', {
         method: 'PUT',
         body: JSON.stringify({
           name: profileData.name ?? profileData.fullName ?? '',
@@ -755,7 +755,7 @@ function AppProvider({ children }) {
     }
 
     try {
-      const response = await authFetch(`http://localhost:4000/api/volunteers/${volunteerId}/availability`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/volunteers/${volunteerId}/availability`, {
         method: 'PATCH',
         body: JSON.stringify({ isAvailable }),
       })
@@ -775,7 +775,7 @@ function AppProvider({ children }) {
 
   const updateAlertStatus = useCallback(async (alertId, status) => {
     try {
-      const response = await authFetch(`http://localhost:4000/api/alerts/${alertId}/status`, {
+      const response = await authFetch(`https://her-shield-production.up.railway.app/api/alerts/${alertId}/status`, {
         method: 'PATCH',
         body: JSON.stringify({ status }),
       })
@@ -832,7 +832,7 @@ function AppProvider({ children }) {
         )
         const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`
         const smsMessage = `Emergency! ${currentUser?.name || 'User'} needs help. Location: ${mapsLink}`
-        await authFetch('http://localhost:4000/api/users/location', {
+        await authFetch('https://her-shield-production.up.railway.app/api/users/location', {
           method: 'POST',
           body: JSON.stringify({
             latitude,
@@ -840,7 +840,7 @@ function AppProvider({ children }) {
           }),
         })
 
-        const createAlertResponse = await authFetch('http://localhost:4000/api/alerts', {
+        const createAlertResponse = await authFetch('https://her-shield-production.up.railway.app/api/alerts', {
           method: 'POST',
           body: JSON.stringify({ latitude, longitude }),
         })
@@ -853,7 +853,7 @@ function AppProvider({ children }) {
         const createdAlert = createdAlertResult.alert
         setActiveAlertId(createdAlert.id)
 
-        const assignmentResponse = await authFetch('http://localhost:4000/api/alerts/auto-assign', {
+        const assignmentResponse = await authFetch('https://her-shield-production.up.railway.app/api/alerts/auto-assign', {
           method: 'POST',
           body: JSON.stringify({
             alertId: createdAlert.id,
@@ -878,7 +878,7 @@ function AppProvider({ children }) {
 
         startLiveLocationTracking(alertWithAssignment.id)
 
-        const response = await authFetch('http://localhost:4000/api/send-contact-alerts', {
+        const response = await authFetch('https://her-shield-production.up.railway.app/api/send-contact-alerts', {
           method: 'POST',
           body: JSON.stringify({
             userName: currentUser?.name || 'User',
@@ -1012,7 +1012,7 @@ function AppProvider({ children }) {
   )
 
   const updateVolunteerVerification = useCallback(async (volunteerId, isVerified) => {
-    const response = await authFetch(`http://localhost:4000/api/volunteers/${volunteerId}/verification`, {
+    const response = await authFetch(`https://her-shield-production.up.railway.app/api/volunteers/${volunteerId}/verification`, {
       method: 'PATCH',
       body: JSON.stringify({ isVerified }),
     })

@@ -6,7 +6,7 @@
 # Terminal 1: Start Backend (if not already running)
 cd c:\Users\KB\projects\her-shield
 npm run server
-# Output: "MongoDB connected" + "Socket server listening on http://localhost:4000"
+# Output: "MongoDB connected" + "Socket server listening on https://her-shield-production.up.railway.app"
 
 # Terminal 2: Start Frontend (if not already running)
 cd c:\Users\KB\projects\her-shield
@@ -17,7 +17,7 @@ npm run dev
 ## Current Server Status
 
 - **Frontend:** http://localhost:5174 ✅
-- **Backend API:** http://localhost:4000 ✅
+- **Backend API:** https://her-shield-production.up.railway.app ✅
 - **Database:** MongoDB connected ✅
 - **Real-time:** Socket.io active ✅
 

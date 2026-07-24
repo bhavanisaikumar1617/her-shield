@@ -121,7 +121,7 @@ function AdminPage() {
 
     setActionLoadingId(`${alert.id}-reassign`)
     try {
-      await fetch('http://localhost:4000/api/alerts/auto-assign', {
+      await fetch('https://her-shield-production.up.railway.app/api/alerts/auto-assign', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function AdminPage() {
 
     setSafeZoneSaving(true)
     try {
-      const response = await fetch('http://localhost:4000/api/safe-zones', {
+      const response = await fetch('https://her-shield-production.up.railway.app/api/safe-zones', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ function AdminPage() {
 
   const handleSafeZoneDelete = async (safeZoneId) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/safe-zones/${safeZoneId}`, {
+      const response = await fetch(`https://her-shield-production.up.railway.app/api/safe-zones/${safeZoneId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${authToken}` },
       })
@@ -234,7 +234,7 @@ function AdminPage() {
 
     setSavingPassword(true)
     try {
-      const response = await fetch('http://localhost:4000/api/users/change-password', {
+      const response = await fetch('https://her-shield-production.up.railway.app/api/users/change-password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

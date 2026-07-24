@@ -19,7 +19,7 @@ function VolunteerVerificationPanel() {
   useEffect(() => {
     const fetchPendingVolunteers = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/admin/volunteers/pending', {
+        const response = await fetch('https://her-shield-production.up.railway.app/api/admin/volunteers/pending', {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -48,7 +48,7 @@ function VolunteerVerificationPanel() {
   const handleApprove = async (volunteerId) => {
     setActionLoading(volunteerId)
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/volunteer/approve/${volunteerId}`, {
+      const response = await fetch(`https://her-shield-production.up.railway.app/api/admin/volunteer/approve/${volunteerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ function VolunteerVerificationPanel() {
   const handleReject = async (volunteerId) => {
     setActionLoading(volunteerId)
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/volunteer/reject/${volunteerId}`, {
+      const response = await fetch(`https://her-shield-production.up.railway.app/api/admin/volunteer/reject/${volunteerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

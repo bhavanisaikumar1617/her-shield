@@ -4,7 +4,7 @@ import PageTransition from '../components/PageTransition'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 function ForgotPasswordPage() {
-  const authBaseUrl = 'http://localhost:4000/api/auth'
+  const authBaseUrl = 'https://her-shield-production.up.railway.app/api/auth'
   const [email, setEmail] = useState('')
   const [token, setToken] = useState('')
   const [newPassword, setNewPassword] = useState('')

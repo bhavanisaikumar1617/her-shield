@@ -21,7 +21,7 @@ app.use(cors())
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ limit: '10mb', extended: true }))
 
-const jwtSecret = globalThis.process?.env?.JWT_SECRET || 'her-shield-dev-secret'
+const jwtSecret = String(globalThis.process?.env?.JWT_SECRET || '').trim()
 const jwtExpiresIn = '8h'
 const frontendBaseUrl = globalThis.process?.env?.FRONTEND_URL || 'http://localhost:5173'
 const smtpHost = globalThis.process?.env?.SMTP_HOST || ''
@@ -33,6 +33,15 @@ const smtpFrom = globalThis.process?.env?.SMTP_FROM || 'no-reply@hershield.local
 const signupRoles = ['user', 'volunteer']
 const rateLimitBuckets = new Map()
 
+const allowedOrigins = [
+  frontendBaseUrl,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
+].filter(Boolean)
+const uniqueAllowedOrigins = [...new Set(allowedOrigins)]
+
 function isFiniteNumber(value) {
   return typeof value === 'number' && Number.isFinite(value)
 }
@@ -40,6 +49,19 @@ function isFiniteNumber(value) {
 function toNumber(value) {
   const parsed = Number(value)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+function isDatabaseUnavailableError(error) {
+  const errorName = String(error?.name || '')
+  const errorMessage = String(error?.message || '')
+
+  return (
+    errorName === 'MongooseServerSelectionError' ||
+    errorName === 'MongoServerError' ||
+    errorMessage.includes('ECONNREFUSED') ||
+    errorMessage.toLowerCase().includes('authentication failed') ||
+    errorMessage.toLowerCase().includes('bad auth')
+  )
 }
 
 function createRateLimiter({ windowMs, maxRequests }) {
@@ -403,13 +425,10 @@ app.post('/api/auth/signup', authRateLimiter, async (request, response) => {
     })
   } catch (error) {
     console.error('Signup failed:', error)
-    const isDatabaseUnavailable =
-      error?.name === 'MongooseServerSelectionError' || String(error?.message || '').includes('ECONNREFUSED')
-
-    if (isDatabaseUnavailable) {
+    if (isDatabaseUnavailableError(error)) {
       response.status(503).json({
         ok: false,
-        message: 'Database unavailable. Start MongoDB or configure MONGODB_URI.',
+        message: 'Database unavailable. Configure MONGO_URI and ensure MongoDB is reachable.',
       })
       return
     }
@@ -547,6 +566,14 @@ app.post('/api/auth/login', authRateLimiter, async (request, response) => {
     })
   } catch (error) {
     console.error('Login failed:', error)
+    if (isDatabaseUnavailableError(error)) {
+      response.status(503).json({
+        ok: false,
+        message: 'Database unavailable. Configure MONGO_URI and ensure MongoDB is reachable.',
+      })
+      return
+    }
+
     response.status(500).json({ ok: false, message: 'Unable to login right now.' })
   }
 })
@@ -1688,7 +1715,7 @@ app.post('/api/send-contact-alerts', verifyToken, requireRole('user'), sosRateLi
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: uniqueAllowedOrigins,
     methods: ['GET', 'POST'],
   },
 })
@@ -1740,26 +1767,30 @@ httpServer.on('error', (error) => {
 })
 
 async function startServer() {
-  const mongoUri = getMongoUri()
-  if (!mongoUri) {
-    console.error('MONGO_URI missing in server/.env')
+  if (!jwtSecret) {
+    console.error('JWT_SECRET missing in environment configuration')
     globalThis.process?.exit?.(1)
     return
   }
 
-  try {
-    console.log('Connecting to MongoDB Atlas...')
-    await connectToDatabase()
-    console.log('MongoDB Atlas connected')
-  } catch (error) {
-    console.error('MongoDB connection failed:', error)
-    globalThis.process?.exit?.(1)
-    return
+  const mongoUri = getMongoUri()
+  if (!mongoUri) {
+    console.warn('MONGO_URI missing in environment configuration; connectToDatabase will attempt a development fallback if available')
   }
 
   httpServer.listen(port, () => {
     console.log(`Socket server listening on http://localhost:${port}`)
   })
+
+  // Start listening first so frontend requests don't fail with ECONNREFUSED.
+  // DB-dependent routes already guard with connectToDatabase() and return errors when unavailable.
+  connectToDatabase()
+    .then(() => {
+      console.log('MongoDB Atlas connected')
+    })
+    .catch((error) => {
+      console.error('MongoDB connection failed. API routes requiring DB will return errors until connection is restored.', error)
+    })
 }
 
 startServer()

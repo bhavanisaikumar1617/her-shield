@@ -58,7 +58,7 @@ function VolunteerEmergencyPage() {
         setTrackingPosition({ latitude, longitude })
 
         try {
-          await fetch(`http://localhost:4000/api/volunteers/${currentUser.id}/location`, {
+          await fetch(`https://her-shield-production.up.railway.app/api/volunteers/${currentUser.id}/location`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function VolunteerEmergencyPage() {
     }
 
     try {
-      await fetch(`http://localhost:4000/api/alerts/${selectedAlert.id}/complete`, {
+      await fetch(`https://her-shield-production.up.railway.app/api/alerts/${selectedAlert.id}/complete`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${authToken}`,
