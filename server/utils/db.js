@@ -44,10 +44,8 @@ async function connectToDatabase() {
   if (!connectPromise) {
     connectPromise = mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: getMongoConnectTimeoutMs(),
- HEAD
-    }).catch(async (error) => {
+HEAD
     }).catch((error) => {
-       00e3eadeedf04164f6bbbcd8c92dc01d5df03121
       connectPromise = null
       // Improve error messaging for common DNS / SRV issues (e.g. ENOTFOUND)
       if (error && (error.code === 'ENOTFOUND' || error.syscall === 'querySrv')) {
