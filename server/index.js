@@ -23,7 +23,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }))
 
 const jwtSecret = String(globalThis.process?.env?.JWT_SECRET || '').trim()
 const jwtExpiresIn = '8h'
-const frontendBaseUrl = globalThis.process?.env?.FRONTEND_URL || 'http://localhost:5173'
+const frontendBaseUrl = globalThis.process?.env?.FRONTEND_URL || 'https://her-shield-mu.vercel.app'
 const smtpHost = globalThis.process?.env?.SMTP_HOST || ''
 const smtpPort = Number(globalThis.process?.env?.SMTP_PORT || 587)
 const smtpUser = globalThis.process?.env?.SMTP_USER || ''
@@ -35,7 +35,7 @@ const rateLimitBuckets = new Map()
 
 const allowedOrigins = [
   frontendBaseUrl,
-  'http://localhost:5173',
+  'https://her-shield-mu.vercel.app',
   'http://localhost:5174',
   'http://localhost:5175',
   'http://localhost:5176',
@@ -1775,9 +1775,8 @@ async function startServer() {
 
   const mongoUri = getMongoUri()
   if (!mongoUri) {
-<<<<<<< HEAD
+ HEAD
     console.warn('MONGO_URI missing in environment configuration; connectToDatabase will attempt a development fallback if available')
-=======
     console.error('MONGO_URI missing in environment configuration')
     globalThis.process?.exit?.(1)
     return

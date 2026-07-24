@@ -44,7 +44,7 @@ async function connectToDatabase() {
   if (!connectPromise) {
     connectPromise = mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: getMongoConnectTimeoutMs(),
-<<<<<<< HEAD
+ HEAD
     }).catch(async (error) => {
 =======
     }).catch((error) => {

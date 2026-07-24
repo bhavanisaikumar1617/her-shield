@@ -76,7 +76,7 @@ Create `server/.env` and configure:
 MONGO_URI=
 JWT_SECRET=
 PORT=4000
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=https://her-shield-mu.vercel.app
 ```
 
 ## 🚀 Run Locally
