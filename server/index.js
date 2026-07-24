@@ -1780,7 +1780,7 @@ async function startServer() {
     console.error('MONGO_URI missing in environment configuration')
     globalThis.process?.exit?.(1)
     return
->>>>>>> 00e3eadeedf04164f6bbbcd8c92dc01d5df03121
+     00e3eadeedf04164f6bbbcd8c92dc01d5df03121
   }
 
   httpServer.listen(port, () => {
