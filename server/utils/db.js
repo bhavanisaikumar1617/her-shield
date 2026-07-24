@@ -44,9 +44,9 @@ async function connectToDatabase() {
   if (!connectPromise) {
     connectPromise = mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: getMongoConnectTimeoutMs(),
-HEAD
-    }).catch((error) => {
+    }).catch(async (error) => {
       connectPromise = null
+
       // Improve error messaging for common DNS / SRV issues (e.g. ENOTFOUND)
       if (error && (error.code === 'ENOTFOUND' || error.syscall === 'querySrv')) {
         const hint = `Failed to resolve SRV record for MongoDB. If you're using MongoDB Atlas (mongodb+srv), ensure your network and DNS can resolve cluster SRV records, your Atlas IP whitelist allows your current IP, and the MONGO_URI is correct.`
@@ -58,14 +58,11 @@ HEAD
           const localUri = globalThis.process?.env?.MONGO_FALLBACK_URI || 'mongodb://localhost:27017/her-shield'
           console.warn(`Attempting fallback MongoDB connection to ${maskUri(localUri)}`)
           try {
-            // try local connection with a short timeout
-            const fallbackPromise = mongoose.connect(localUri, {
+            const fallbackPromise = await mongoose.connect(localUri, {
               serverSelectionTimeoutMS: Math.max(2000, getMongoConnectTimeoutMs()),
             })
-            // return fallback if successful
-            return await fallbackPromise
+            return fallbackPromise
           } catch (fallbackError) {
-            // Fall through to throw combined error below
             console.error('Local MongoDB fallback failed:', fallbackError.message || fallbackError)
           }
         }
